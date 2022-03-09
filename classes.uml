@@ -1,0 +1,52 @@
+@startuml
+
+class AbstractEntity {
+-id : int
+}
+
+class Request {
+-requester : User
+-createdBy : User
+-subject : String
+-description : String
+-category : Category
+-priority : Priority
+-dueDate : Date
+}
+
+class Department {
+-name : String
+}
+
+class User {
+-firstName : String
+-lastName : String
+-department : Department
+-groups : List<Group>
++getName() : String
+}
+
+class Group {
+-name : String
+}
+
+class Category {
+-name : String
+}
+
+class Priority {
+-name : String
+}
+
+
+
+User "0..*" -- "0..*" Group
+User "0..*" -- "1" Department
+Request "0..*" --"1" User
+Request "0..*" -- "1" Category
+Request "0..*" -- "1" Priority
+
+class AbstractEntity
+note left: All model classes\n extend AbstractEntity
+
+@enduml
