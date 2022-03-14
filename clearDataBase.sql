@@ -5,3 +5,4 @@ drop table helpdesk.user_groups;
 drop table helpdesk.user;
 drop table helpdesk.group_;
 drop table helpdesk.department;
+drop table helpdesk.hibernate_sequence;

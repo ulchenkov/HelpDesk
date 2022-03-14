@@ -10,8 +10,7 @@ public class HomeController {
     @GetMapping
     public String index(Model model) {
         model.addAttribute("title","The first string");
-        String[] footers = {"footer1", "footer2"};
-        model.addAttribute("footers", footers);
+        model.addAttribute("pageTitle","HelpDesk System");
         return "index";
     }
 }

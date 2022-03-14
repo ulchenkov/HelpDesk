@@ -4,7 +4,7 @@ class AbstractEntity {
 -id : int
 }
 
-class Request {
+class Ticket {
 -requester : User
 -createdBy : User
 -subject : String
@@ -42,9 +42,9 @@ class Priority {
 
 User "0..*" -- "0..*" Group
 User "0..*" -- "1" Department
-Request "0..*" --"1" User
-Request "0..*" -- "1" Category
-Request "0..*" -- "1" Priority
+Ticket "0..*" --"1" User
+Ticket "0..*" -- "1" Category
+Ticket "0..*" -- "1" Priority
 
 class AbstractEntity
 note left: All model classes\n extend AbstractEntity
