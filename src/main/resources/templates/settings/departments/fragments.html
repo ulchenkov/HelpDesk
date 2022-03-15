@@ -11,7 +11,7 @@
 <!-- add-department -->
 <form th:fragment="add-department" class="row g-3" method="post">
     <div class="col-md">
-        <label for="firstName" class="form-label">Name</label>
+        <label for="name" class="form-label">Name</label>
         <input type="text" class="form-control" th:field="${department.name}">
         </label>
         <p class="text-danger" th:errors="${department.name}"></p>
@@ -21,23 +21,62 @@
     </div>
 </form>
 
+<!-- edit-department -->
+<form th:fragment="edit-department" class="row g-3" method="post">
+    <div class="col-md">
+        <label for="name" class="form-label">Name</label>
+        <input type="text" class="form-control" th:field="${department.name}">
+        </label>
+        <p class="text-danger" th:errors="${department.name}"></p>
+    </div>
+    <div class="col-12">
+        <input type="hidden" th:field="${department.id}">
+        <input type="submit" value="Edit department" class="btn btn-primary">
+    </div>
+</form>
+
+<!-- delete-department -->
+<form th:fragment="delete-department" class="row g-3" method="post">
+    <input type="hidden" th:field="${department.id}">
+    <div class="col-md">
+        <p class="pt-3"> Do you want to delete department
+            <span th:text="${department.name}" class="fw-bold"></span>?
+        </p>
+    </div>
+    <div class="col-12">
+        <input type="submit" value="Yes, delete department" class="btn btn-danger">
+    </div>
+</form>
+
 <!-- main-table -->
 <th:block th:fragment="main-table">
     <div class="row">
-        <div class="col">
-            <a class="btn btn-primary" th:href="${addLink}" role="button">Add New Department</a>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
+        <div class="col-6">
             <table class="table">
                 <tr>
                     <th>Department Name</th>
+                    <th>&nbsp;</th>
                 </tr>
                 <tr th:each="department : ${departments}">
                     <td th:text="${department.name}"></td>
+                    <td class="text-end">
+                        <nobr>
+                            <a th:href="@{/settings/departments/edit/(id=${department.id})}">
+                                <i class="bi bi-pencil-square" title="Edit department"></i></a>
+                            &nbsp;
+                            <a th:href="@{/settings/departments/delete/(id=${department.id})}">
+                                <i class="bi bi-trash3" title="Delete departments"></i>
+                            </a>
+                        </nobr>
+                    </td>
                 </tr>
             </table>
+        </div>
+        <div class="col-6"></div>
+    </div>
+    <div class="row pt-3">
+        <div class="col">
+            <a class="btn btn-primary" th:href="${addLink}" role="button">Add New Department</a>
         </div>
     </div>
 </th:block>

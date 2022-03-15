@@ -3,6 +3,8 @@ package org.launchcode.helpdesk.models;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +12,8 @@ import java.util.List;
 @Table(name = "group_")
 public class Group extends AbstractEntity{
 
+    @NotBlank(message = "Group name is required")
+    @Size(min = 3, message = "Group name must be at least 3 characters long")
     private String name;
 
     @ManyToMany(mappedBy = "groups")

@@ -59,6 +59,16 @@ public class User extends AbstractEntity{
         this.passwordHash = encoder.encode(newUser.getPassword());
     }
 
+    public void update(User updatedUser) {
+        this.firstName = updatedUser.getFirstName();
+        this.lastName = updatedUser.getLastName();
+        this.department = updatedUser.getDepartment();
+        this.emailAddress = updatedUser.getEmailAddress();
+        this.phoneNumber = updatedUser.getPhoneNumber();
+        this.isActive = updatedUser.isActive();
+        this.username = updatedUser.getUsername();
+    }
+
     public String getFirstName() {
         return firstName;
     }

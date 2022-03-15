@@ -18,6 +18,16 @@ public class UserDto extends User {
         this.setActive(true);
     }
 
+//    public UserDto(User user) {
+//        this.setFirstName(user.getFirstName());
+//        this.setLastName(user.getLastName());
+//        this.setDepartment(user.getDepartment());
+//        this.setEmailAddress(user.getEmailAddress());
+//        this.setPhoneNumber(user.getPhoneNumber());
+//        this.setActive(user.isActive());
+//        this.setUsername(user.getUsername());
+//    }
+
     public String getPassword() {
         return password;
     }

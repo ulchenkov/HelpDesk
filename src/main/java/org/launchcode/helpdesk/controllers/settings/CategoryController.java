@@ -1,8 +1,8 @@
 package org.launchcode.helpdesk.controllers.settings;
 
-import org.launchcode.helpdesk.data.DepartmentRepository;
+import org.launchcode.helpdesk.data.CategoryRepository;
 import org.launchcode.helpdesk.helpers.SDHelper;
-import org.launchcode.helpdesk.models.Department;
+import org.launchcode.helpdesk.models.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
@@ -13,41 +13,41 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @Controller
-@RequestMapping("settings/departments")
-public class DepartmentController {
+@RequestMapping("settings/categories")
+public class CategoryController {
 
     @Autowired
-    DepartmentRepository departmentRepository;
+    CategoryRepository categoryRepository;
 
-    private final String basePath = "/settings/departments/";
+    private final String basePath = "/settings/categories/";
 
     @GetMapping
     public String index(Model model) {
         SDHelper.initializeModel(model, this.basePath, "", "main-table");
         model.addAttribute("addLink", this.basePath + "add/");
-        model.addAttribute("departments", departmentRepository.findAll());
+        model.addAttribute("categories", categoryRepository.findAll());
         return "index";
     }
 
     @GetMapping("add")
     public String displayAddForm(Model model) {
-        SDHelper.initializeModel(model, this.basePath, "add", "add-department");
-        model.addAttribute("department", new Department());
+        SDHelper.initializeModel(model, this.basePath, "add", "add-category");
+        model.addAttribute("category", new Category());
         return "index";
     }
 
     @PostMapping("add")
     public String processAddForm(
-            @ModelAttribute @Valid Department department,
+            @ModelAttribute @Valid Category category,
             Errors errors,
             Model model) {
 
         if (errors.hasErrors()) {
-            SDHelper.initializeModel(model, this.basePath, "add", "add-department");
+            SDHelper.initializeModel(model, this.basePath, "add", "add-category");
             return "index";
         }
 
-        departmentRepository.save(department);
+        categoryRepository.save(category);
         return "redirect:" + this.basePath;
     }
 
@@ -58,26 +58,26 @@ public class DepartmentController {
             return "redirect:" + this.basePath;
         }
 
-        SDHelper.initializeModel(model, this.basePath, "edit", "edit-department");
-        model.addAttribute("department", departmentRepository.findById(id).get());
+        SDHelper.initializeModel(model, this.basePath, "edit", "edit-category");
+        model.addAttribute("category", categoryRepository.findById(id).get());
         return "index";
     }
 
     @PostMapping("edit")
     public String processEditForm(
-            @ModelAttribute @Valid Department department,
+            @ModelAttribute @Valid Category updatedCategory,
             Errors errors,
             @RequestParam int id,
             Model model) {
 
         if (errors.hasErrors()) {
-            SDHelper.initializeModel(model, this.basePath, "edit", "edit-department");
+            SDHelper.initializeModel(model, this.basePath, "edit", "edit-category");
             return "index";
         }
 
-        Department oldDepartment = departmentRepository.findById(id).get();
-        oldDepartment.setName(department.getName());
-        departmentRepository.save(oldDepartment);
+        Category category = categoryRepository.findById(id).get();
+        category.setName(updatedCategory.getName());
+        categoryRepository.save(category);
         return "redirect:" + this.basePath;
     }
 
@@ -88,8 +88,8 @@ public class DepartmentController {
             return "redirect:" + this.basePath;
         }
 
-        SDHelper.initializeModel(model, this.basePath, "delete", "delete-department");
-        model.addAttribute("department", departmentRepository.findById(id).get());
+        SDHelper.initializeModel(model, this.basePath, "delete", "delete-category");
+        model.addAttribute("category", categoryRepository.findById(id).get());
         return "index";
     }
 
@@ -98,10 +98,10 @@ public class DepartmentController {
             @RequestParam int id,
             Model model) {
         try {
-            departmentRepository.deleteById(id);}
+            categoryRepository.deleteById(id);}
         catch (DataIntegrityViolationException exception) {
             SDHelper.initializeModel(model, this.basePath, "delete", "fragments", "error");
-            model.addAttribute("errorText", "Department can not be deleted!");
+            model.addAttribute("errorText", "Category can not be deleted!");
             return "index";
         }
         return "redirect:" + this.basePath;

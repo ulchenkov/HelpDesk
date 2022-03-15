@@ -1,4 +1,4 @@
-package org.launchcode.helpdesk.data.helpers;
+package org.launchcode.helpdesk.helpers;
 
 import java.util.ArrayList;
 import java.util.List;

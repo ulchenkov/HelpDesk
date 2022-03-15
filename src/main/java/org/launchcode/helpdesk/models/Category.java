@@ -2,12 +2,16 @@ package org.launchcode.helpdesk.models;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 public class Category extends AbstractEntity {
 
+    @NotBlank(message = "Category name is required")
+    @Size(min = 3, message = "Category name must be at least 3 characters long")
     private String name;
 
     @OneToMany(mappedBy = "category")

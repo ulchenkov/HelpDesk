@@ -1,4 +1,4 @@
-package org.launchcode.helpdesk.data.helpers;
+package org.launchcode.helpdesk.helpers;
 
 public class Fragment {
 
