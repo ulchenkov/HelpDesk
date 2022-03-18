@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
 <head>
     <meta charset="UTF-8"/>
@@ -45,11 +45,15 @@
 
 <!-- add-priority -->
 <form th:fragment="add-priority" class="row g-3" method="post">
-    <div class="col-md">
+    <div class="col-md-12">
         <label for="name" class="form-label">Name</label>
         <input type="text" class="form-control" th:field="${priority.name}">
-        </label>
         <p class="text-danger" th:errors="${priority.name}"></p>
+    </div>
+    <div class="col-md-12">
+        <label for="timeframe" class="form-label">Timeframe for ticket resolving, hours *</label>
+        <input type="text" class="form-control" th:field="${priority.timeframe}">
+        <p class="text-danger" th:errors="${priority.timeframe}"></p>
     </div>
     <div class="col-12">
         <input type="submit" value="Add priority" class="btn btn-primary">
@@ -59,11 +63,15 @@
 
 <!-- edit-priority -->
 <form th:fragment="edit-priority" class="row g-3" method="post">
-    <div class="col-md">
+    <div class="col-md-12">
         <label for="name" class="form-label">Name</label>
         <input type="text" class="form-control" th:field="${priority.name}">
-        </label>
         <p class="text-danger" th:errors="${priority.name}"></p>
+    </div>
+    <div class="col-md-12">
+        <label for="timeframe" class="form-label">Timeframe for ticket resolving, hours *</label>
+        <input type="text" class="form-control" th:field="${priority.timeframe}">
+        <p class="text-danger" th:errors="${priority.timeframe}"></p>
     </div>
     <div class="col-12">
         <input type="hidden" th:field="${priority.id}">

@@ -77,6 +77,7 @@ public class CategoryController {
 
         Category category = categoryRepository.findById(id).get();
         category.setName(updatedCategory.getName());
+        category.setPrefix(updatedCategory.getPrefix());
         categoryRepository.save(category);
         return "redirect:" + this.basePath;
     }

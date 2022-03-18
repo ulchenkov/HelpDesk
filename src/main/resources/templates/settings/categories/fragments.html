@@ -10,11 +10,15 @@
 
 <!-- add-category -->
 <form th:fragment="add-category" class="row g-3" method="post">
-    <div class="col-md">
+    <div class="col-md-12">
         <label for="name" class="form-label">Name</label>
         <input type="text" class="form-control" th:field="${category.name}">
-        </label>
         <p class="text-danger" th:errors="${category.name}"></p>
+    </div>
+    <div class="col-md-12">
+        <label for="prefix" class="form-label">Prefix for ticket ID</label>
+        <input type="text" class="form-control" th:field="${category.prefix}">
+        <p class="text-danger" th:errors="${category.prefix}"></p>
     </div>
     <div class="col-12">
         <input type="submit" value="Add category" class="btn btn-primary">
@@ -23,11 +27,16 @@
 
 <!-- edit-category -->
 <form th:fragment="edit-category" class="row g-3" method="post">
-    <div class="col-md">
+    <div class="col-md-12">
         <label for="name" class="form-label">Name</label>
         <input type="text" class="form-control" th:field="${category.name}">
         </label>
         <p class="text-danger" th:errors="${category.name}"></p>
+    </div>
+    <div class="col-md-12">
+        <label for="prefix" class="form-label">Prefix for ticket ID</label>
+        <input type="text" class="form-control" th:field="${category.prefix}">
+        <p class="text-danger" th:errors="${category.prefix}"></p>
     </div>
     <div class="col-12">
         <input type="hidden" th:field="${category.id}">

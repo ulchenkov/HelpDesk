@@ -1,4 +1,4 @@
-package org.launchcode.helpdesk.data.dto;
+package org.launchcode.helpdesk.models.dto;
 
 import org.launchcode.helpdesk.models.User;
 

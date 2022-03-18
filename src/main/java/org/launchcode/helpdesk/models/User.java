@@ -1,13 +1,11 @@
 package org.launchcode.helpdesk.models;
 
-import org.hibernate.validator.constraints.UniqueElements;
-import org.launchcode.helpdesk.data.dto.UserDto;
+import org.launchcode.helpdesk.models.dto.UserDto;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +42,9 @@ public class User extends AbstractEntity{
 
     @OneToMany(mappedBy = "createdBy")
     private final List<Ticket> createdTickets = new ArrayList<>();
+
+    @OneToMany(mappedBy = "author")
+    private final List<Comment> commentsAuthors = new ArrayList<>();
 
     public User() { }
 
@@ -147,5 +148,9 @@ public class User extends AbstractEntity{
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public void addGroup(Group group) {
+        this.groups.add(group);
     }
 }

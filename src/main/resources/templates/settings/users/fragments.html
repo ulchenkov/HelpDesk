@@ -12,21 +12,27 @@
 <th:block th:fragment="main-table">
     <div class="row">
         <div class="col">
-            <table class="table">
+            <table class="table table-striped">
                 <tr>
                     <th>Username</th>
                     <th>Full Name</th>
                     <th>Email Address</th>
+                    <th>Department</th>
                     <th>Phone Number</th>
                     <th>&nbsp;</th>
                 </tr>
-                <tr th:each="user : ${users}">
+                <tr th:each="user : ${users}" th:class="${user.active} ? '' : 'text-secondary'">
+                    <!---->
                     <td th:text="${user.username}"></td>
                     <td th:text="${user.name}"></td>
                     <td th:text="${user.emailAddress}"></td>
+                    <td th:text="${user.department} ? ${user.department.name} : 'n/a'"></td>
                     <td th:text="${user.phoneNumber}"></td>
                     <td class="text-end">
                         <nobr>
+                            <a th:href="@{/settings/users/edit-groups/(id=${user.id})}">
+                                <i class="bi bi-people" title="Edit user groups"></i></a>
+                            &nbsp;
                             <a th:href="@{/settings/users/edit/(id=${user.id})}">
                                 <i class="bi bi-pencil-square" title="Edit user"></i></a>
                             &nbsp;
@@ -60,9 +66,14 @@
         <p class="text-danger" th:errors="${userDto.lastName}"></p>
     </div>
     <div class="col-md-6">
-        <label for="emailAddress" class="form-label">Email address *</label>
-        <input type="text" class="form-control" th:field="${userDto.emailAddress}">
-        <p class="text-danger" th:errors="${userDto.emailAddress}"></p>
+        <label for="department" class="form-label">Department</label>
+        <select class="form-select" th:field="${userDto.department}">
+            <option th:each="department : ${departments}"
+                    th:value="${department.id}"
+                    th:text="${department.name}"
+            ></option>
+        </select>
+        <p class="text-danger" th:errors="${userDto.department}"></p>
     </div>
     <div class="col-md-6">
         <label for="phoneNumber" class="form-label">Phone number</label>
@@ -76,7 +87,9 @@
         <p th:if="${isUsernameAlreadyTaken}" class="text-danger">Username already exist</p>
     </div>
     <div class="col-md-6">
-        &nbsp;
+        <label for="emailAddress" class="form-label">Email address *</label>
+        <input type="text" class="form-control" th:field="${userDto.emailAddress}">
+        <p class="text-danger" th:errors="${userDto.emailAddress}"></p>
     </div>
     <div class="col-12">
         <div class="form-check">
@@ -117,9 +130,14 @@
         <p class="text-danger" th:errors="${user.lastName}"></p>
     </div>
     <div class="col-md-6">
-        <label for="emailAddress" class="form-label">Email address *</label>
-        <input type="text" class="form-control" th:field="${user.emailAddress}">
-        <p class="text-danger" th:errors="${user.emailAddress}"></p>
+        <label for="department" class="form-label">Department</label>
+        <select class="form-select" th:field="${user.department}">
+            <option th:each="department : ${departments}"
+                    th:value="${department.id}"
+                    th:text="${department.name}"
+            ></option>
+        </select>
+        <p class="text-danger" th:errors="${user.department}"></p>
     </div>
     <div class="col-md-6">
         <label for="phoneNumber" class="form-label">Phone number</label>
@@ -133,9 +151,11 @@
         <p th:if="${isUsernameAlreadyTaken}" class="text-danger">Username already exist</p>
     </div>
     <div class="col-md-6">
-        &nbsp;
+        <label for="emailAddress" class="form-label">Email address *</label>
+        <input type="text" class="form-control" th:field="${user.emailAddress}">
+        <p class="text-danger" th:errors="${user.emailAddress}"></p>
     </div>
-    <div class="col-12">
+    <div class="col-6">
         <div class="form-check">
             <input class="form-check-input" type="checkbox" th:field="${user.active}">
             <label class="form-check-label" for="active">
@@ -143,6 +163,19 @@
             </label>
             <p class="text-danger" th:errors="${user.active}"></p>
         </div>
+    </div>
+    <div class="col-6">
+        <p>
+            Member of:
+            <th:block th:each="group : ${user.groups}">
+                <span class="fst-italic">
+                    <nobr th:text="${group.name} + '; '"></nobr>
+                </span>
+            </th:block>
+            &nbsp;
+            <a th:href="@{/settings/users/edit-groups/(id=${user.id})}">
+                <i class="bi bi-people" title="Edit user groups"></i></a>
+        </p>
     </div>
     <div class="col-12">
         <input type="hidden" th:field="${user.id}">
@@ -179,7 +212,7 @@
     <!-- prompt for delete -->
     <div class="row">
         <div class="col">
-            <form th:fragment="delete-priority" class="row g-3" method="post">
+            <form class="row g-3" method="post">
                 <input type="hidden" th:field="${user.id}">
                 <div class="col-md">
                     <p class="pt-3"> Do you want to delete user
@@ -193,6 +226,47 @@
         </div>
     </div>
 </th:block>
+
+
+<!-- user-edit-groups -->
+<th:block th:fragment="user-edit-groups">
+    <div class="row">
+        <div class="col text-center">
+            <h4>
+                <span th:text="${user.name}"></span>
+                (<span th:text="${user.username}"></span>)
+            </h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <h5 class="text-center">Member off:</h5>
+            <ul class="list-group">
+                <li th:each="group : ${user.groups}" class="list-group-item">
+                    <span th:text="${group.name}"></span>
+                    <a th:href="@{/settings/users/edit-groups-remove/(userId=${user.id}, groupId=${group.id})}"
+                       title="Remove group"><i class="bi bi-x-lg text-danger"></i></a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-6">
+            <h5 class="text-center">Add new group</h5>
+            <form class="row g-3" method="post">
+                <input type="hidden" th:field="${userGroup.user}">
+                <div class="input-group">
+                    <select class="form-select" th:field="${userGroup.group}">
+                        <option th:each="group : ${groups}"
+                                th:value="${group.id}"
+                                th:text="${group.name}"
+                        ></option>
+                    </select>
+                    <input type="submit" value="Add group" class="btn btn-primary">
+                </div>
+            </form>
+        </div>
+    </div>
+</th:block>
+
 
 </body>
 </html>

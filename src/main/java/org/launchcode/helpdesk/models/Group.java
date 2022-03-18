@@ -37,4 +37,5 @@ public class Group extends AbstractEntity{
     public List<User> getUsers() {
         return users;
     }
+
 }

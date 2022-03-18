@@ -75,6 +75,7 @@ public class PriorityController {
 
         Priority priority = priorityRepository.findById(id).get();
         priority.setName(updatedPriority.getName());
+        priority.setTimeframe(updatedPriority.getTimeframe());
         priorityRepository.save(priority);
         return "redirect:" + this.basePath;
     }

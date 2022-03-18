@@ -14,6 +14,8 @@ public class Category extends AbstractEntity {
     @Size(min = 3, message = "Category name must be at least 3 characters long")
     private String name;
 
+    private String prefix;
+
     @OneToMany(mappedBy = "category")
     private final List<Ticket> tickets = new ArrayList<>();
 
@@ -32,7 +34,15 @@ public class Category extends AbstractEntity {
         this.name = name;
     }
 
-    public List<Ticket> getRequests() {
+    public List<Ticket> getTickets() {
         return tickets;
+    }
+
+    public String getPrefix() {
+        return prefix;
+    }
+
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
     }
 }
