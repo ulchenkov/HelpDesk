@@ -1,5 +1,6 @@
 package org.launchcode.helpdesk.controllers.settings;
 
+import org.launchcode.helpdesk.controllers.AbstractBaseController;
 import org.launchcode.helpdesk.helpers.SDHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("settings")
-public class SettingsController {
+public class SettingsController extends AbstractBaseController {
 
     private final String basePath = "/settings/";
 

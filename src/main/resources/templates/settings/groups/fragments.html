@@ -9,29 +9,55 @@
 <body>
 
 <!-- add-group -->
-<form th:fragment="add-group" class="row g-3" method="post">
-    <div class="col-md">
-        <label for="name" class="form-label">Name</label>
-        <input type="text" class="form-control" th:field="${group.name}">
-        </label>
-        <p class="text-danger" th:errors="${group.name}"></p>
-    </div>
-    <div class="col-12">
-        <input type="submit" value="Add group" class="btn btn-primary">
-    </div>
-</form>
+<!--<form th:fragment="add-group" class="row g-3" method="post">-->
+<!--    <div class="col-md">-->
+<!--        <label for="name" class="form-label">Name</label>-->
+<!--        <input type="text" class="form-control" th:field="${group.name}">-->
+<!--        </label>-->
+<!--        <p class="text-danger" th:errors="${group.name}"></p>-->
+<!--    </div>-->
+<!--    <div class="col-12">-->
+<!--        <input type="submit" value="Add group" class="btn btn-primary">-->
+<!--    </div>-->
+<!--</form>-->
 
 <!-- edit-group -->
-<form th:fragment="edit-group" class="row g-3" method="post">
+<!--<form th:fragment="edit-group" class="row g-3" method="post">-->
+<!--    <div class="col-md">-->
+<!--        <label for="name" class="form-label">Name</label>-->
+<!--        <input type="text" class="form-control" th:field="${group.name}">-->
+<!--        </label>-->
+<!--        <p class="text-danger" th:errors="${group.name}"></p>-->
+<!--    </div>-->
+<!--    <div class="col-12">-->
+<!--        <input th:if="${group.id} > 0" type="hidden" th:field="${group.id}">-->
+<!--        <input type="submit" value="Save group" class="btn btn-primary">-->
+<!--    </div>-->
+<!--</form>-->
+
+<form th:fragment="view-group" class="row g-3" method="post" th:object="${group}">
     <div class="col-md">
         <label for="name" class="form-label">Name</label>
-        <input type="text" class="form-control" th:field="${group.name}">
+        <input type="text" class="form-control" th:field="*{name}">
         </label>
         <p class="text-danger" th:errors="${group.name}"></p>
     </div>
+    <div class="col-md">
+        <div th:each="role : ${roles}" class="form-check">
+            <input class="form-check-input"
+                   type="checkbox" name="roles"
+                   th:field="*{roles}"
+                   th:value="${role}"
+            />
+            <label class="form-check-label"
+                   th:for="${role.springRole}"
+                   th:text="${role.text}"
+            ></label>
+        </div>
+    </div>
     <div class="col-12">
-        <input type="hidden" th:field="${group.id}">
-        <input type="submit" value="Edit group" class="btn btn-primary">
+        <input th:if="${group.id} > 0" type="hidden" th:field="${group.id}">
+        <input type="submit" value="Save group" class="btn btn-primary">
     </div>
 </form>
 
@@ -51,14 +77,20 @@
 <!-- main-table -->
 <th:block th:fragment="main-table">
     <div class="row">
-        <div class="col-6">
+        <div class="col">
             <table class="table">
                 <tr>
                     <th>Group Name</th>
+                    <th>Roles</th>
                     <th>&nbsp;</th>
                 </tr>
                 <tr th:each="group : ${groups}">
                     <td th:text="${group.name}"></td>
+                    <td>
+                        <span th:each="role : ${group.roles}">
+                            <nobr th:text="${role.text} + '; '"></nobr>
+                        </span>
+                    </td>
                     <td class="text-end">
                         <nobr>
                             <a th:href="@{/settings/groups/edit/(id=${group.id})}">
@@ -72,7 +104,6 @@
                 </tr>
             </table>
         </div>
-        <div class="col-6"></div>
     </div>
     <div class="row pt-3">
         <div class="col">

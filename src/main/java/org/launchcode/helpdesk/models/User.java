@@ -1,6 +1,7 @@
 package org.launchcode.helpdesk.models;
 
 import org.launchcode.helpdesk.models.dto.UserDto;
+import org.launchcode.helpdesk.models.enums.Role;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
@@ -34,7 +35,7 @@ public class User extends AbstractEntity{
     @ManyToOne
     private Department department;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private final List<Group> groups = new ArrayList<>();
 
     @OneToMany(mappedBy = "requester")
@@ -99,7 +100,7 @@ public class User extends AbstractEntity{
     }
 
     public List<Group> getGroups() {
-        return groups;
+        return new ArrayList<Group>(this.groups);
     }
 
     public List<Ticket> getRequestedTickets() {
@@ -151,6 +152,27 @@ public class User extends AbstractEntity{
     }
 
     public void addGroup(Group group) {
+        if(group == null || this.groups.contains(group)) {
+            return;
+        }
         this.groups.add(group);
+    }
+
+    public void setPassword(String password) {
+        this.passwordHash = encoder.encode(password);
+    }
+
+
+    public List<Role> getRoles() {
+
+        ArrayList<Role> roles = new ArrayList<>();
+        for(Group group : this.groups) {
+            for(Role role : group.getRoles()) {
+                if (!roles.contains(role)) {
+                    roles.add(role);
+                }
+            }
+        }
+        return roles;
     }
 }

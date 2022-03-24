@@ -1,5 +1,6 @@
 package org.launchcode.helpdesk.controllers.tickets;
 
+import org.launchcode.helpdesk.controllers.AbstractBaseController;
 import org.launchcode.helpdesk.data.*;
 import org.launchcode.helpdesk.helpers.SDHelper;
 import org.launchcode.helpdesk.models.Comment;
@@ -18,7 +19,7 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("tickets")
-public class TicketController {
+public class TicketController extends AbstractBaseController {
 
     private final String basePath = "/tickets/";
 

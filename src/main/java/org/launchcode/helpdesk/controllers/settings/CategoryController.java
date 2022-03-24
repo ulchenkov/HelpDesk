@@ -1,5 +1,6 @@
 package org.launchcode.helpdesk.controllers.settings;
 
+import org.launchcode.helpdesk.controllers.AbstractBaseController;
 import org.launchcode.helpdesk.data.CategoryRepository;
 import org.launchcode.helpdesk.helpers.SDHelper;
 import org.launchcode.helpdesk.models.Category;
@@ -14,7 +15,7 @@ import javax.validation.Valid;
 
 @Controller
 @RequestMapping("settings/categories")
-public class CategoryController {
+public class CategoryController extends AbstractBaseController {
 
     @Autowired
     CategoryRepository categoryRepository;

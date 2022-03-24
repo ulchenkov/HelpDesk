@@ -1,5 +1,6 @@
 package org.launchcode.helpdesk.controllers.settings;
 
+import org.launchcode.helpdesk.controllers.AbstractBaseController;
 import org.launchcode.helpdesk.data.DepartmentRepository;
 import org.launchcode.helpdesk.data.GroupRepository;
 import org.launchcode.helpdesk.data.UserRepository;
@@ -22,7 +23,7 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("settings/users")
-public class UserController {
+public class UserController extends AbstractBaseController {
 
     @Autowired
     private UserRepository userRepository;

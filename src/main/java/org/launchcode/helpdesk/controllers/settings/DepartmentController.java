@@ -1,5 +1,6 @@
 package org.launchcode.helpdesk.controllers.settings;
 
+import org.launchcode.helpdesk.controllers.AbstractBaseController;
 import org.launchcode.helpdesk.data.DepartmentRepository;
 import org.launchcode.helpdesk.helpers.SDHelper;
 import org.launchcode.helpdesk.models.Department;
@@ -14,7 +15,7 @@ import javax.validation.Valid;
 
 @Controller
 @RequestMapping("settings/departments")
-public class DepartmentController {
+public class DepartmentController extends AbstractBaseController {
 
     @Autowired
     DepartmentRepository departmentRepository;

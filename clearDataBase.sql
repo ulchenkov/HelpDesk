@@ -1,3 +1,4 @@
+drop table helpdesk.comment;
 drop table helpdesk.ticket;
 drop table helpdesk.category;
 drop table helpdesk.priority;

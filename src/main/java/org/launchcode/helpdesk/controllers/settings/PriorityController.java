@@ -1,5 +1,6 @@
 package org.launchcode.helpdesk.controllers.settings;
 
+import org.launchcode.helpdesk.controllers.AbstractBaseController;
 import org.launchcode.helpdesk.data.PriorityRepository;
 import org.launchcode.helpdesk.helpers.SDHelper;
 import org.launchcode.helpdesk.models.Priority;
@@ -14,7 +15,7 @@ import javax.validation.Valid;
 
 @Controller
 @RequestMapping("settings/priorities")
-public class PriorityController {
+public class PriorityController extends AbstractBaseController {
 
     @Autowired
     PriorityRepository priorityRepository;

@@ -1,8 +1,10 @@
 package org.launchcode.helpdesk.controllers.settings;
 
+import org.launchcode.helpdesk.controllers.AbstractBaseController;
 import org.launchcode.helpdesk.data.GroupRepository;
 import org.launchcode.helpdesk.helpers.SDHelper;
 import org.launchcode.helpdesk.models.Group;
+import org.launchcode.helpdesk.models.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
@@ -14,7 +16,7 @@ import javax.validation.Valid;
 
 @Controller
 @RequestMapping("settings/groups")
-public class GroupController {
+public class GroupController extends AbstractBaseController {
 
     @Autowired
     GroupRepository groupRepository;
@@ -26,13 +28,15 @@ public class GroupController {
         SDHelper.initializeModel(model, this.basePath, "", "main-table");
         model.addAttribute("addLink", this.basePath + "add/");
         model.addAttribute("groups", groupRepository.findAll());
+        model.addAttribute("roles", Role.values());
         return "index";
     }
 
     @GetMapping("add")
     public String displayAddForm(Model model) {
-        SDHelper.initializeModel(model, this.basePath, "add", "add-group");
+        SDHelper.initializeModel(model, this.basePath, "add", "view-group");
         model.addAttribute("group", new Group());
+        model.addAttribute("roles", Role.values());
         return "index";
     }
 
@@ -43,7 +47,8 @@ public class GroupController {
             Model model) {
 
         if (errors.hasErrors()) {
-            SDHelper.initializeModel(model, this.basePath, "add", "add-group");
+            SDHelper.initializeModel(model, this.basePath, "add", "view-group");
+            model.addAttribute("roles", Role.values());
             return "index";
         }
 
@@ -58,8 +63,9 @@ public class GroupController {
             return "redirect:" + this.basePath;
         }
 
-        SDHelper.initializeModel(model, this.basePath, "edit", "edit-group");
+        SDHelper.initializeModel(model, this.basePath, "edit", "view-group");
         model.addAttribute("group", groupRepository.findById(id).get());
+        model.addAttribute("roles", Role.values());
         return "index";
     }
 
@@ -68,15 +74,23 @@ public class GroupController {
             @ModelAttribute @Valid Group editedGroup,
             Errors errors,
             @RequestParam int id,
+            @RequestParam(required = false) Role[] roles,
             Model model) {
 
         if (errors.hasErrors()) {
-            SDHelper.initializeModel(model, this.basePath, "edit", "edit-group");
+            SDHelper.initializeModel(model, this.basePath, "edit", "view-group");
+            model.addAttribute("roles", Role.values());
             return "index";
         }
 
         Group group = groupRepository.findById(id).get();
         group.setName(editedGroup.getName());
+        group.clearRoles();
+        if (roles != null) {
+            for(Role role : roles) {
+                group.addRole(role);
+            }
+        }
         groupRepository.save(group);
         return "redirect:" + this.basePath;
     }

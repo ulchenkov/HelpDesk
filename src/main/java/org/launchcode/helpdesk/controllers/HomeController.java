@@ -6,7 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class HomeController {
+public class HomeController extends AbstractBaseController {
 
     private String basePath="/";
 
@@ -15,4 +15,5 @@ public class HomeController {
         SDHelper.initializeModel(model, this.basePath, "", "index-page");
         return "index";
     }
+
 }
