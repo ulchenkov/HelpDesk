@@ -4,6 +4,7 @@ package org.launchcode.helpdesk.controllers.auth;
 import org.launchcode.helpdesk.controllers.AbstractBaseController;
 import org.launchcode.helpdesk.data.GroupRepository;
 import org.launchcode.helpdesk.data.UserRepository;
+import org.launchcode.helpdesk.helpers.SDHelper;
 import org.launchcode.helpdesk.models.Group;
 import org.launchcode.helpdesk.models.User;
 import org.launchcode.helpdesk.models.dto.UserDto;
@@ -24,38 +25,40 @@ import java.util.ArrayList;
 @Controller
 public class AuthenticationController extends AbstractBaseController {
 
+    private final String basePath = "/signin/";
+
     @Autowired
     UserRepository userRepository;
     @Autowired
     GroupRepository groupRepository;
 
-    @GetMapping("register")
-    public String displayRegisterForm(Model model) {
-        model.addAttribute("userDto", new UserDto());
-        return "register";
-    }
+//    @GetMapping("register")
+//    public String displayRegisterForm(Model model) {
+//        model.addAttribute("userDto", new UserDto());
+//        return "register";
+//    }
+//
+//    @PostMapping("register")
+//    public String processRegisterForm(
+//            @ModelAttribute @Valid UserDto userDto,
+//            Errors errors,
+//            Model model
+//            ) {
+//        if (errors.hasErrors()) {
+//            return "register";
+//        }
+//
+//        try {
+//            userService.save(userDto);
+//        } catch (UserExistException exception) {
+//            errors.rejectValue("username", "username.alreadyexist", exception.getMessage());
+//            return "register";
+//        }
+//
+//        return "redirect:/";
+//    }
 
-    @PostMapping("register")
-    public String processRegisterForm(
-            @ModelAttribute @Valid UserDto userDto,
-            Errors errors,
-            Model model
-            ) {
-        if (errors.hasErrors()) {
-            return "register";
-        }
-
-        try {
-            userService.save(userDto);
-        } catch (UserExistException exception) {
-            errors.rejectValue("username", "username.alreadyexist", exception.getMessage());
-            return "register";
-        }
-
-        return "redirect:/";
-    }
-
-    @GetMapping("login")
+    @GetMapping("signin")
     public String displayLogin(Model model, Principal user, String error, String logout) {
 
         if (userRepository.findAll().size() == 0) {
@@ -82,6 +85,8 @@ public class AuthenticationController extends AbstractBaseController {
             userRepository.save(adminUser);
         }
 
+        SDHelper.initializeModel(model, this.basePath, "", "sign-in");
+
         if (user != null) {
             return "redirect:/";
         }
@@ -94,7 +99,7 @@ public class AuthenticationController extends AbstractBaseController {
             model.addAttribute(MESSAGE_KEY, "info|You have logged out");
         }
 
-        return "login";
+        return "index";
     }
 
 }

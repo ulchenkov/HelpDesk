@@ -10,10 +10,10 @@
                 <h4>LaunchCode HelpDesk</h4>
             </div>
             <div th:if="${loggedInUser}" class="col text-end">
-                You are signed as <b th:text="${loggedInUser.name}">Dan Brown</b>&nbsp;<a href="/logout" class="text-white">Sign Out</a>
+                You are signed as <b th:text="${loggedInUser.name}"></b>&nbsp;<a href="/signout" class="text-white">Sign Out</a>
             </div>
             <div th:unless="${loggedInUser}" class="col text-end">
-                You are not signed yet! Please, <a href="/login" class="text-white">Sign In</a>
+                You are not signed in yet! Please, <a href="/signin" class="text-white">Sign In</a>
             </div>
         </div>
         <div class="row">

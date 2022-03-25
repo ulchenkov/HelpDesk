@@ -53,7 +53,8 @@ public class TicketController extends AbstractBaseController {
         model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("priorities", priorityRepository.findAll());
 
-        User user=userRepository.findById(1).get();
+        User user = getAuthenticatedUser();
+
         Ticket ticket = new Ticket();
         ticket.setCreatedBy(user);
         ticket.setRequester(user);
@@ -99,7 +100,7 @@ public class TicketController extends AbstractBaseController {
         model.addAttribute("priorities", priorityRepository.findAll());
         model.addAttribute("ticket", opt.get());
 
-        User author = userRepository.findById(1).get();
+        User author = getAuthenticatedUser();
         Comment newComment = new Comment();
         newComment.setAuthor(author);
         newComment.setTicket(opt.get());

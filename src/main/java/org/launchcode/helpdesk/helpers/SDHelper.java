@@ -1,5 +1,10 @@
 package org.launchcode.helpdesk.helpers;
 
+import org.launchcode.helpdesk.models.User;
+import org.launchcode.helpdesk.user.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 
 import java.util.HashMap;
@@ -11,6 +16,8 @@ public class SDHelper {
         LinkList crumbs = new LinkList();
         Map<String, String> sections = new HashMap<>();
         sections.put("/", "Home");
+
+        sections.put("/signin/", "Sign In");
 
         sections.put("/settings/", "Settings");
         sections.put("/settings/users/", "User list");
@@ -112,9 +119,13 @@ public class SDHelper {
             menu.getMenu().add(new Link("Create", path + "create/"));
             menu.getMenu().add(new Link("View", path + "view/"));
             return menu;
+        } else if  (basePath.split("/")[1].equals("signin")) {
+            LeftMenu menu = new LeftMenu("Sign In");
+            return menu;
         }
         else {
             throw new IllegalArgumentException("wrong path!");
         }
     }
+
 }

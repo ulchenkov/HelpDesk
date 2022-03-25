@@ -27,7 +27,16 @@
 
 <!-- index-page -->
 <th:block th:fragment="index-page">
-    <h2>Use left menu to select section</h2>
+    <th:block th:unless="${loggedInUser}">
+        <h2 class="text-secondary text-center">
+            You are not signed in yet!
+        </h2>
+        <h3 class="text-center">
+            Please, <a href="/signin" class="link-primary">Sign In</a>
+        </h3>
+    </th:block>
+
+    <h2  th:if="${loggedInUser}" class="text-primary text-center">Use left menu to start working with the system</h2>
 </th:block>
 </body>
 </html>
