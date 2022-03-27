@@ -45,7 +45,13 @@
             </div>
             <div class="col-md">
                 <label for="createdBy" class="form-label">Created By</label>
-                <p th:text="${ticket.createdBy.name} + ' (@' + ${ticket.createdBy.username} + ') | ' + ${ticket.createdFormatted}"></p>
+                <p >
+                    <span th:text="${ticket.createdBy.name}" class="fw-bold"></span>
+                    <span th:text="' (@' + ${ticket.createdBy.username} + ')'"></span>
+                    <br>
+                    at <span th:text="${ticket.createdFormatted}" class="fw-bold"></span>
+
+                </p>
                 <input type="hidden" th:field="${ticket.createdBy}">
             </div>
             <div class="col-md">

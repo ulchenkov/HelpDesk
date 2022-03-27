@@ -70,6 +70,14 @@ public class UserController extends AbstractBaseController {
         try {
             userRepository.save(new User(userDto));
         } catch (DataIntegrityViolationException exception) {
+
+//        try {
+//            userService.save(userDto);
+//        } catch (UserExistException exception) {
+//            errors.rejectValue("username", "username.alreadyexist", exception.getMessage());
+//            return "register";
+//        }
+
             SDHelper.initializeModel(model, this.basePath, "add", "add-user");
             model.addAttribute("isUsernameAlreadyTaken", true);
             return "index";

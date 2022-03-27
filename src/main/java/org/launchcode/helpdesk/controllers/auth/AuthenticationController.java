@@ -59,7 +59,21 @@ public class AuthenticationController extends AbstractBaseController {
 //    }
 
     @GetMapping("signin")
-    public String displayLogin(Model model, Principal user, String error, String logout) {
+    public String displayLogin(Model model, Principal user, String error, String signout) {
+
+        if (user != null) {
+            return "redirect:/";
+        }
+
+        if (error != null) {
+            model.addAttribute(MESSAGE_KEY, "danger|Your username and password are invalid");
+        }
+
+        if (signout != null) {
+            model.addAttribute(MESSAGE_KEY, "info|You have signed out");
+        }
+
+        SDHelper.initializeModel(model, this.basePath, "", "sign-in");
 
         if (userRepository.findAll().size() == 0) {
             Group adminGroup = null;
@@ -78,25 +92,16 @@ public class AuthenticationController extends AbstractBaseController {
 
             User adminUser = new User();
             adminUser.setUsername("admin");
-            adminUser.setPassword("admin123");
+            adminUser.setPassword("admin");
             adminUser.setEmailAddress("admin@domen.com");
+            adminUser.setFirstName("Admin");
+            adminUser.setLastName("Don't_forget_to_change_password!");
             adminUser.addGroup(adminGroup);
             adminUser.setActive(true);
             userRepository.save(adminUser);
-        }
-
-        SDHelper.initializeModel(model, this.basePath, "", "sign-in");
-
-        if (user != null) {
-            return "redirect:/";
-        }
-
-        if (error != null) {
-            model.addAttribute(MESSAGE_KEY, "danger|Your username and password are invalid");
-        }
-
-        if (logout != null) {
-            model.addAttribute(MESSAGE_KEY, "info|You have logged out");
+            model.addAttribute(MESSAGE_KEY, "warning|The user database is empty. " +
+                    "Default user 'admin' with password 'admin' has been added. " +
+                    "Use these credentials to sign in. Don't forget to change the default password after you signed in.");
         }
 
         return "index";

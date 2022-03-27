@@ -1,6 +1,7 @@
 package org.launchcode.helpdesk.helpers;
 
 import org.launchcode.helpdesk.models.User;
+import org.launchcode.helpdesk.models.enums.Role;
 import org.launchcode.helpdesk.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -72,12 +73,17 @@ public class SDHelper {
         model.addAttribute("breadCrumbs", crumbs.getAll());
         model.addAttribute("title",crumbs.getLast().getText());
 
-        LeftMenu menu = getLeftMenu(basePath);
+        LeftMenu menu = getLeftMenu(basePath, (User)model.getAttribute("loggedInUser"));
         model.addAttribute("leftMenu", menu.getMenu().getAll());
         model.addAttribute("leftMenuTitle", menu.getTitle());
 
+        for (Fragment fragment : mainContent) {
+            String fileName = fragment.getFile();
+            if (fileName != null && fileName.startsWith("/")) {
+                fragment.setFile(fileName.substring(1));
+            }
+        }
         model.addAttribute("content", mainContent);
-
     }
 
     public static void initializeModel(Model model, String basePath, String action, String mainContentFragmentFile, String mainContentFragmentName) {
@@ -96,12 +102,18 @@ public class SDHelper {
                 new Fragment[] {new Fragment(basePath + "fragments", mainContentFragmentName)});
     }
 
-    private static LeftMenu getLeftMenu(String basePath) {
+    private static LeftMenu getLeftMenu(String basePath, User user) {
         if (basePath.equals("/")) {
             String path="/";
             LeftMenu menu = new LeftMenu("Main Menu");
-            menu.getMenu().add(new Link("Tickets", path + "tickets/"));
-            menu.getMenu().add(new Link("Settings", path + "settings/"));
+            if (user != null) {
+                if (user.getRoles().contains(Role.USER) || user.getRoles().contains(Role.IT_SUPPORT)) {
+                    menu.getMenu().add(new Link("Tickets", path + "tickets/"));
+                }
+                if (user.getRoles().contains(Role.ADMIN)) {
+                    menu.getMenu().add(new Link("Settings", path + "settings/"));
+                }
+            }
             return menu;
         }
         else if (basePath.split("/")[1].equals("settings")) {

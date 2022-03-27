@@ -28,15 +28,21 @@
 <!-- index-page -->
 <th:block th:fragment="index-page">
     <th:block th:unless="${loggedInUser}">
-        <h2 class="text-secondary text-center">
+        <h2 class="text-secondary text-center mt-5">
             You are not signed in yet!
         </h2>
-        <h3 class="text-center">
+        <h3 class="text-center mt-3 mb-5">
             Please, <a href="/signin" class="link-primary">Sign In</a>
         </h3>
     </th:block>
 
-    <h2  th:if="${loggedInUser}" class="text-primary text-center">Use left menu to start working with the system</h2>
+    <th:block th:if="${loggedInUser}">
+        <h2 class="text-secondary text-center mt-5">
+            Welcome, <span class="fw-bold" th:text="${loggedInUser.name}"></span>!
+        </h2>
+        <h3 class="text-center mt-3 mb-5">Please, use left menu to start working with the system</h3>
+    </th:block>
+
 </th:block>
 </body>
 </html>
