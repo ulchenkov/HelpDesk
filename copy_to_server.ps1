@@ -1,0 +1,1 @@
+scp -i D:\Vit\Clouds\Oracle\SSH_keys\ssh-key-2021-07-11.key D:/Coding/Java/LaunchCode/Project/helpdesk/build/libs/helpdesk-0.0.1-SNAPSHOT.jar ubuntu@mysql-dev:/home/ubuntu/docker_containers/helpdesk-prod
