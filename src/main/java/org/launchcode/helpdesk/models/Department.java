@@ -11,7 +11,7 @@ import java.util.List;
 public class Department extends AbstractEntity{
 
     @NotBlank(message = "Department name is required")
-    @Size(min = 3, message = "Department name must be at least 3 characters long")
+    @Size(min = 2, message = "Department name must be at least 2 characters long")
     private String name;
 
     @OneToMany(mappedBy = "department")

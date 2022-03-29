@@ -11,8 +11,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Entity
 public class Ticket extends AbstractEntity {
@@ -159,6 +158,13 @@ public class Ticket extends AbstractEntity {
     }
 
     public List<Comment> getComments() {
-        return comments;
+        List<Comment> sortedComments = new ArrayList<>(comments);
+        sortedComments.sort(new Comparator<Comment>() {
+            @Override
+            public int compare(Comment o1, Comment o2) {
+                return o1.getId() - o2.getId();
+            }
+        });
+        return sortedComments;
     }
 }

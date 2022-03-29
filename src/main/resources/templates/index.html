@@ -27,8 +27,11 @@
                     <div class="col">
                         <ul class="nav flex-column">
                             <th:block th:each="menuItem : ${leftMenu}">
-                                <li class="nav-item">
+                                <li class="nav-item" th:if="${menuItem.url}">
                                     <a class="nav-link active" aria-current="page" th:href="${menuItem.url}" th:text="${menuItem.text}">item</a>
+                                </li>
+                                <li class="nav-item bg-light text-center" th:unless="${menuItem.url}">
+                                    <span class="fw-bold" th:text="${menuItem.text}">item</span>
                                 </li>
                             </th:block>
                         </ul>

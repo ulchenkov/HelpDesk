@@ -7,6 +7,7 @@ import org.launchcode.helpdesk.models.Comment;
 import org.launchcode.helpdesk.models.Ticket;
 import org.launchcode.helpdesk.models.User;
 import org.launchcode.helpdesk.models.dto.CommentDTO;
+import org.launchcode.helpdesk.models.enums.Role;
 import org.launchcode.helpdesk.models.enums.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,7 +16,10 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Controller
 @RequestMapping("tickets")
@@ -42,7 +46,18 @@ public class TicketController extends AbstractBaseController {
     @GetMapping
     public String index(Model model) {
         SDHelper.initializeModel(model, this.basePath, "", "main-table");
-        model.addAttribute("tickets", ticketRepository.findAll());
+        Set<Ticket> tickets = new HashSet<>();
+        User user = getAuthenticatedUser();
+
+        if (user.getRoles().contains(Role.IT_SUPPORT)) {
+
+        }
+        ArrayList<Status> statuses = new ArrayList<>();
+        statuses.add(Status.ASSIGNED);
+
+        tickets.addAll(ticketRepository.findByRequesterAndStatusIn(user, statuses));
+        tickets.addAll(ticketRepository.findByCreatedByAndStatusIn(user, statuses));
+        model.addAttribute("tickets", tickets);
         return "index";
     }
 

@@ -126,10 +126,23 @@ public class SDHelper {
             menu.getMenu().add(new Link("Ticket Priorities", path + "priorities/"));
             return menu;
         } else if (basePath.split("/")[1].equals("tickets")) {
-            String path = "/tickets/";
+            String path = "/tickets/view?view=";
             LeftMenu menu = new LeftMenu("Tickets");
-            menu.getMenu().add(new Link("Create", path + "create/"));
-            menu.getMenu().add(new Link("View", path + "view/"));
+            if (user != null) {
+                if (user.getRoles().contains(Role.IT_SUPPORT)) {
+                    menu.getMenu().add(new Link("IN PROGRESS", null));
+                    menu.getMenu().add(new Link("Assigned", path + "it_assigned"));
+                    menu.getMenu().add(new Link("Pending", path + "it_pending"));
+                    menu.getMenu().add(new Link("Solved", path + "it_solved"));
+                }
+                if (user.getRoles().contains(Role.USER)) {
+                    menu.getMenu().add(new Link("MY TICKETS", null));
+                    menu.getMenu().add(new Link("All active", path + "allactive"));
+                    menu.getMenu().add(new Link("In process", path + "inprocess"));
+                    menu.getMenu().add(new Link("Awaiting my response", path + "awaiting"));
+                    menu.getMenu().add(new Link("All closed", path + "closed"));
+                }
+            }
             return menu;
         } else if  (basePath.split("/")[1].equals("signin")) {
             LeftMenu menu = new LeftMenu("Sign In");
