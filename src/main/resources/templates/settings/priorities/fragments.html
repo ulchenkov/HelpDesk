@@ -16,10 +16,12 @@
             <table class="table">
                 <tr>
                     <th>Priority Name</th>
+                    <th>Timeframe for ticket resolving, hours</th>
                     <th>&nbsp;</th>
                 </tr>
                 <tr th:each="priority : ${priorities}">
                     <td th:text="${priority.name}"></td>
+                    <td th:text="${priority.timeframe}"></td>
                     <td class="text-end">
                         <nobr>
                             <a th:href="@{/settings/priorities/edit/(id=${priority.id})}">

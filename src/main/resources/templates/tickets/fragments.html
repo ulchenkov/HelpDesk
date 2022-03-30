@@ -10,30 +10,40 @@
 
 <!-- main-table -->
 <th:block th:fragment="main-table">
-    <div class="row">
-        <div class="col">
-            <table class="table table-striped">
-                <tr>
-                    <th>ID</th>
-                    <th>Title</th>
-                    <th>Requester</th>
-                    <th>Department</th>
-                    <th>Priority</th>
-                    <th>Due date</th>
-                </tr>
-                <tr th:each="ticket : ${tickets}">
-                    <td>
-                        <a th:href="@{/tickets/view/(id=${ticket.id})}" th:text="${ticket.fullId}"></a>
-                    </td>
-                    <td th:text="${ticket.title}"></td>
-                    <td th:text="${ticket.requester.name} + ' (@' + ${ticket.requester.username} + ')'"></td>
-                    <td th:text="${ticket.requester.department} ? ${ticket.requester.department.name} : 'n/a'"></td>
-                    <td th:text="${ticket.priority.name}"></td>
-                    <td th:text="${ticket.dueDateFormatted}"></td>
-                </tr>
-            </table>
+    <th:block th:each="ticketBlock : ${ticketBlocks}">
+        <div class="row">
+            <div class="col mt-3">
+                <table class="table caption-top table-striped">
+                    <caption th:text="${ticketBlock.title}"></caption>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Status</th>
+                            <th>Requester</th>
+                            <th>Department</th>
+                            <th>Priority</th>
+                            <th>Due date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="ticket : ${ticketBlock.tickets}">
+                            <td>
+                                <a th:href="@{/tickets/view/(id=${ticket.id})}" th:text="${ticket.fullId}"></a>
+                            </td>
+                            <td th:text="${ticket.title}"></td>
+                            <td th:text="${ticket.status.text}"></td>
+                            <td th:text="${ticket.requester.name} + ' (@' + ${ticket.requester.username} + ')'"></td>
+                            <td th:text="${ticket.requester.department} ? ${ticket.requester.department.name} : 'n/a'"></td>
+                            <td th:text="${ticket.priority.name}"></td>
+                            <td th:text="${ticket.dueDateFormatted}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
+
+    </th:block>
 
     <div class="row pt-3">
         <div class="col">

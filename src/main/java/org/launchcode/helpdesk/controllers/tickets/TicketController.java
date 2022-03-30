@@ -3,6 +3,7 @@ package org.launchcode.helpdesk.controllers.tickets;
 import org.launchcode.helpdesk.controllers.AbstractBaseController;
 import org.launchcode.helpdesk.data.*;
 import org.launchcode.helpdesk.helpers.SDHelper;
+import org.launchcode.helpdesk.helpers.TicketBlock;
 import org.launchcode.helpdesk.models.Comment;
 import org.launchcode.helpdesk.models.Ticket;
 import org.launchcode.helpdesk.models.User;
@@ -16,10 +17,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Controller
 @RequestMapping("tickets")
@@ -44,20 +42,68 @@ public class TicketController extends AbstractBaseController {
 
 
     @GetMapping
-    public String index(Model model) {
-        SDHelper.initializeModel(model, this.basePath, "", "main-table");
-        Set<Ticket> tickets = new HashSet<>();
+    public String index(Model model, @RequestParam(required = false) String view) {
+        if (view == null) {
+            view = "";
+        }
+
+        List<TicketBlock> ticketBlocks = new ArrayList<>();
         User user = getAuthenticatedUser();
 
         if (user.getRoles().contains(Role.IT_SUPPORT)) {
-
+            List<Status> statuses = new ArrayList<>();
+            switch (view) {
+                case "it_assigned" -> statuses.add(Status.ASSIGNED);
+                case "it_pending" -> statuses.add(Status.PENDING);
+                case "it_solved" -> statuses.add(Status.SOLVED);
+                case "" -> {
+                    statuses.add(Status.ASSIGNED);
+                    statuses.add(Status.PENDING);
+                    statuses.add(Status.SOLVED);
+                }
+            }
+            List<Ticket> tickets = ticketRepository.findByStatusIn(statuses);
+            if (tickets.size() > 0) {
+                TicketBlock ticketBlock = new TicketBlock("Tickets to solve");
+                ticketBlock.getTickets().addAll(tickets);
+                ticketBlocks.add(ticketBlock);
+            }
         }
-        ArrayList<Status> statuses = new ArrayList<>();
-        statuses.add(Status.ASSIGNED);
 
-        tickets.addAll(ticketRepository.findByRequesterAndStatusIn(user, statuses));
-        tickets.addAll(ticketRepository.findByCreatedByAndStatusIn(user, statuses));
-        model.addAttribute("tickets", tickets);
+        if (user.getRoles().contains(Role.USER)) {
+            List<Status> statuses = new ArrayList<>();
+            switch (view) {
+                case "allactive" -> {
+                    statuses.add(Status.CREATED);
+                    statuses.add(Status.ASSIGNED);
+                    statuses.add(Status.PENDING);
+                    statuses.add(Status.SOLVED);
+                }
+                case "inprogress" -> statuses.add(Status.ASSIGNED);
+                case "awaiting" -> {
+                    statuses.add(Status.PENDING);
+                    statuses.add(Status.SOLVED);
+                }
+                case "closed" -> statuses.add(Status.CLOSED);
+                case "" -> {
+                    statuses.add(Status.CREATED);
+                    statuses.add(Status.ASSIGNED);
+                    statuses.add(Status.PENDING);
+                    statuses.add(Status.SOLVED);
+                    statuses.add(Status.CLOSED);
+                }
+            }
+            Set<Ticket> tickets = new HashSet<>();
+            tickets.addAll(ticketRepository.findByRequesterAndStatusIn(user, statuses));
+            tickets.addAll(ticketRepository.findByCreatedByAndStatusIn(user, statuses));
+            if (tickets.size() > 0 ) {
+                TicketBlock ticketBlock = new TicketBlock("My tickets");
+                ticketBlock.getTickets().addAll(tickets);
+                ticketBlocks.add(ticketBlock);
+            }
+        }
+        SDHelper.initializeModel(model, this.basePath, "", "main-table");
+        model.addAttribute("ticketBlocks", ticketBlocks);
         return "index";
     }
 
@@ -98,7 +144,7 @@ public class TicketController extends AbstractBaseController {
     }
 
     @GetMapping("view")
-    public String displayViewForm(Model model, @RequestParam(required = true) Integer id) {
+    public String displayViewForm(Model model, @RequestParam(required = false) Integer id) {
         if (id == null) {
             return "redirect:" + this.basePath;
         }

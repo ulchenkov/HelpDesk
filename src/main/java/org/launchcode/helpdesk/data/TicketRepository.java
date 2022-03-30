@@ -12,4 +12,5 @@ public interface TicketRepository extends CrudRepository<Ticket, Integer> {
 
     List<Ticket> findByRequesterAndStatusIn(User requester, Collection<Status> statuses);
     List<Ticket> findByCreatedByAndStatusIn(User createdBy, Collection<Status> statuses);
+    List<Ticket> findByStatusIn(Collection<Status> statuses);
 }

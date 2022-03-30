@@ -64,10 +64,12 @@
             <table class="table">
                 <tr>
                     <th>Category Name</th>
+                    <th>Ticket ID prefix</th>
                     <th>&nbsp;</th>
                 </tr>
                 <tr th:each="category : ${categories}">
                     <td th:text="${category.name}"></td>
+                    <td th:text="${category.prefix}"></td>
                     <td class="text-end">
                         <nobr>
                             <a th:href="@{/settings/categories/edit/(id=${category.id})}">

@@ -126,7 +126,7 @@ public class SDHelper {
             menu.getMenu().add(new Link("Ticket Priorities", path + "priorities/"));
             return menu;
         } else if (basePath.split("/")[1].equals("tickets")) {
-            String path = "/tickets/view?view=";
+            String path = "/tickets?view=";
             LeftMenu menu = new LeftMenu("Tickets");
             if (user != null) {
                 if (user.getRoles().contains(Role.IT_SUPPORT)) {
@@ -138,7 +138,7 @@ public class SDHelper {
                 if (user.getRoles().contains(Role.USER)) {
                     menu.getMenu().add(new Link("MY TICKETS", null));
                     menu.getMenu().add(new Link("All active", path + "allactive"));
-                    menu.getMenu().add(new Link("In process", path + "inprocess"));
+                    menu.getMenu().add(new Link("In progress", path + "inprogress"));
                     menu.getMenu().add(new Link("Awaiting my response", path + "awaiting"));
                     menu.getMenu().add(new Link("All closed", path + "closed"));
                 }
