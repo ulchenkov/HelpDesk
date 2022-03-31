@@ -4,11 +4,14 @@ import org.launchcode.helpdesk.controllers.AbstractBaseController;
 import org.launchcode.helpdesk.data.DepartmentRepository;
 import org.launchcode.helpdesk.data.GroupRepository;
 import org.launchcode.helpdesk.data.UserRepository;
+import org.launchcode.helpdesk.models.Department;
 import org.launchcode.helpdesk.models.Group;
 import org.launchcode.helpdesk.models.dto.UserDto;
 import org.launchcode.helpdesk.helpers.SDHelper;
 import org.launchcode.helpdesk.models.User;
 import org.launchcode.helpdesk.models.dto.UserGroupDTO;
+import org.launchcode.helpdesk.user.UserExistException;
+import org.launchcode.helpdesk.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
@@ -24,6 +27,9 @@ import java.util.Optional;
 @Controller
 @RequestMapping("settings/users")
 public class UserController extends AbstractBaseController {
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private UserRepository userRepository;
@@ -51,7 +57,12 @@ public class UserController extends AbstractBaseController {
 
         SDHelper.initializeModel(model, this.basePath, "add", "add-user");
         model.addAttribute("userDto", new UserDto());
-        model.addAttribute("departments", departmentRepository.findAll());
+
+        List<Department> departments = new ArrayList<>();
+        departments.add(new Department("No department"));
+        departments.addAll((List<Department>)departmentRepository.findAll());
+
+        model.addAttribute("departments", departments);
 
         return "index";
     }
@@ -67,19 +78,15 @@ public class UserController extends AbstractBaseController {
             return "index";
         }
 
+        if (userDto.getDepartment() != null && userDto.getDepartment().getId() == 0) {
+            userDto.setDepartment(null);
+        }
+
         try {
-            userRepository.save(new User(userDto));
-        } catch (DataIntegrityViolationException exception) {
-
-//        try {
-//            userService.save(userDto);
-//        } catch (UserExistException exception) {
-//            errors.rejectValue("username", "username.alreadyexist", exception.getMessage());
-//            return "register";
-//        }
-
+            userService.save(userDto);
+        } catch (UserExistException exception) {
             SDHelper.initializeModel(model, this.basePath, "add", "add-user");
-            model.addAttribute("isUsernameAlreadyTaken", true);
+            errors.rejectValue("username", "username.alreadyexist", exception.getMessage());
             return "index";
         }
         return "redirect:" + this.basePath;
@@ -114,10 +121,10 @@ public class UserController extends AbstractBaseController {
         try {
             User user = userRepository.findById(id).get();
             user.update(updatedUser);
-            userRepository.save(user);
-        } catch (DataIntegrityViolationException exception) {
+            userService.save(user);
+        } catch (UserExistException exception) {
             SDHelper.initializeModel(model, this.basePath, "edit", "edit-user");
-            model.addAttribute("isUsernameAlreadyTaken", true);
+            errors.rejectValue("username", "username.alreadyexist", exception.getMessage());
             return "index";
         }
         return "redirect:" + this.basePath;

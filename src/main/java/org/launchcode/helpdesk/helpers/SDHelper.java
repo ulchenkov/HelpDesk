@@ -2,10 +2,6 @@ package org.launchcode.helpdesk.helpers;
 
 import org.launchcode.helpdesk.models.User;
 import org.launchcode.helpdesk.models.enums.Role;
-import org.launchcode.helpdesk.user.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 
 import java.util.HashMap;

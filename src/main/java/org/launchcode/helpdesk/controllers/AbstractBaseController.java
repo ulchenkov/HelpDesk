@@ -1,7 +1,7 @@
 package org.launchcode.helpdesk.controllers;
 
+import org.launchcode.helpdesk.data.UserRepository;
 import org.launchcode.helpdesk.models.User;
-import org.launchcode.helpdesk.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,15 +11,18 @@ import java.security.Principal;
 
 public class AbstractBaseController {
 
+//    @Autowired
+//    protected UserService userService;
+
     @Autowired
-    protected UserService userService;
+    protected UserRepository userRepository;
 
     protected static final String MESSAGE_KEY = "message";
 
     @ModelAttribute("loggedInUser")
     public User getLoggedInUser(Principal principal) {
         if (principal != null) {
-            return userService.findByUsername(principal.getName());
+            return userRepository.findByUsername(principal.getName());
         }
         return null;
     }
@@ -27,6 +30,6 @@ public class AbstractBaseController {
     public User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
-        return userService.findByUsername(currentPrincipalName);
+        return userRepository.findByUsername(currentPrincipalName);
     }
 }

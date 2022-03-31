@@ -7,20 +7,13 @@ import org.launchcode.helpdesk.data.UserRepository;
 import org.launchcode.helpdesk.helpers.SDHelper;
 import org.launchcode.helpdesk.models.Group;
 import org.launchcode.helpdesk.models.User;
-import org.launchcode.helpdesk.models.dto.UserDto;
 import org.launchcode.helpdesk.models.enums.Role;
-import org.launchcode.helpdesk.user.UserExistException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 
-import javax.validation.Valid;
 import java.security.Principal;
-import java.util.ArrayList;
 
 @Controller
 public class AuthenticationController extends AbstractBaseController {
