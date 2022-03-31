@@ -100,7 +100,7 @@ public class UserController extends AbstractBaseController {
             return "redirect:" + this.basePath;
         }
         SDHelper.initializeModel(model, this.basePath, "edit", "edit-user");
-        model.addAttribute("departments", departmentRepository.findAll());
+        initModelForEditForm(model, id);
         User user = userRepository.findById(id).get();
         model.addAttribute("user", user);
         return "index";
@@ -115,6 +115,7 @@ public class UserController extends AbstractBaseController {
 
         if (errors.hasErrors()) {
             SDHelper.initializeModel(model, this.basePath, "edit", "edit-user");
+            initModelForEditForm(model, id);
             return "index";
         }
 
@@ -124,10 +125,16 @@ public class UserController extends AbstractBaseController {
             userService.save(user);
         } catch (UserExistException exception) {
             SDHelper.initializeModel(model, this.basePath, "edit", "edit-user");
+            initModelForEditForm(model, id);
             errors.rejectValue("username", "username.alreadyexist", exception.getMessage());
             return "index";
         }
         return "redirect:" + this.basePath;
+    }
+
+    private void initModelForEditForm(Model model, int userId) {
+        model.addAttribute("departments", departmentRepository.findAll());
+        model.addAttribute("userId", userId);
     }
 
     @GetMapping("delete")
