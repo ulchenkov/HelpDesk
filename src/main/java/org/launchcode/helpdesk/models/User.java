@@ -158,6 +158,13 @@ public class User extends AbstractEntity{
         this.groups.add(group);
     }
 
+    public void removeGroup(Group group) {
+        if (group == null) {
+            return;
+        }
+        this.groups.remove(group);
+    }
+
     public void setPassword(String password) {
         this.passwordHash = encoder.encode(password);
     }

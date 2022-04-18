@@ -54,16 +54,9 @@ public class UserController extends AbstractBaseController {
 
     @GetMapping("add")
     public String displayAddForm(Model model) {
-
         SDHelper.initializeModel(model, this.basePath, "add", "add-user");
         model.addAttribute("userDto", new UserDto());
-
-        List<Department> departments = new ArrayList<>();
-        departments.add(new Department("No department"));
-        departments.addAll((List<Department>)departmentRepository.findAll());
-
-        model.addAttribute("departments", departments);
-
+        initModelForEditForm(model, 0);
         return "index";
     }
 
@@ -100,7 +93,9 @@ public class UserController extends AbstractBaseController {
             return "redirect:" + this.basePath;
         }
         SDHelper.initializeModel(model, this.basePath, "edit", "edit-user");
+
         initModelForEditForm(model, id);
+
         User user = userRepository.findById(id).get();
         model.addAttribute("user", user);
         return "index";
@@ -133,7 +128,11 @@ public class UserController extends AbstractBaseController {
     }
 
     private void initModelForEditForm(Model model, int userId) {
-        model.addAttribute("departments", departmentRepository.findAll());
+        List<Department> departments = new ArrayList<>();
+        departments.add(new Department("* No department *"));
+        departments.addAll((List<Department>)departmentRepository.findAll());
+
+        model.addAttribute("departments", departments);
         model.addAttribute("userId", userId);
     }
 
@@ -232,7 +231,7 @@ public class UserController extends AbstractBaseController {
         }
         User user = optUser.get();
         Group group = optGroup.get();
-        user.getGroups().remove(group);
+        user.removeGroup(group);
         userRepository.save(user);
         return String.format("redirect:%s%s?id=%s", this.basePath, "edit-groups", user.getId());
     }

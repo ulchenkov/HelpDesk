@@ -84,7 +84,6 @@
         <label for="username" class="form-label">User name *</label>
         <input type="text" class="form-control" th:field="${userDto.username}">
         <p class="text-danger" th:errors="${userDto.username}"></p>
-        <p th:if="${isUsernameAlreadyTaken}" class="text-danger">Username already exist</p>
     </div>
     <div class="col-md-6">
         <label for="emailAddress" class="form-label">Email address *</label>
@@ -148,7 +147,6 @@
         <label for="username" class="form-label">User name *</label>
         <input type="text" class="form-control" th:field="${user.username}">
         <p class="text-danger" th:errors="${user.username}"></p>
-        <p th:if="${isUsernameAlreadyTaken}" class="text-danger">Username already exist</p>
     </div>
     <div class="col-md-6">
         <label for="emailAddress" class="form-label">Email address *</label>

@@ -44,12 +44,19 @@ public class GroupController extends AbstractBaseController {
     public String processAddForm(
             @ModelAttribute @Valid Group group,
             Errors errors,
+            @RequestParam(required = false) Role[] roles,
             Model model) {
 
         if (errors.hasErrors()) {
             SDHelper.initializeModel(model, this.basePath, "add", "view-group");
             model.addAttribute("roles", Role.values());
             return "index";
+        }
+
+        if (roles != null) {
+            for(Role role : roles) {
+                group.addRole(role);
+            }
         }
 
         groupRepository.save(group);
